@@ -15,5 +15,6 @@
       "description": "Sample where you can see how MicroInject works.",
       "path": "Samples~/Usage Sample"
     }
-  ]
+  ],
+  "description": "Enhanced Unity Logger is a simple channel driven logging script for use with Unity."
 }
