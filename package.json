@@ -7,14 +7,6 @@
     "email": "contact@furrfield.com",
     "url": "https://furrfield.com"
   },
-  "type": "tool",
-  "documentationUrl": "https://furrfield-studio.github.io/MicroInject-Docs/",
-  "samples": [
-    {
-      "displayName": "Usage Sample",
-      "description": "Sample where you can see how MicroInject works.",
-      "path": "Samples~/Usage Sample"
-    }
-  ],
+  "documentationUrl": "https://github.com/FurrField-Studio/EnhancedUnityLogger",
   "description": "Enhanced Unity Logger is a simple channel driven logging script for use with Unity."
 }
