@@ -1,0 +1,4 @@
+public enum LoggerChannel : uint
+{
+%DATA%
+}

@@ -1,0 +1,9 @@
+using System.Collections.Generic;
+
+public partial class Logger
+{
+    public static readonly Dictionary<LoggerChannel, string> channelToColour = new Dictionary<LoggerChannel, string>
+    {
+%DATA%
+    };
+}
