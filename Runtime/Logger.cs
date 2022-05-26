@@ -7,10 +7,6 @@ using System.Collections.Generic;
 using UnityEditor;
 #endif
 
-///////////////////////////
-// Types
-///////////////////////////
-
 /// <summary>
 /// The priority of the log
 /// </summary>
@@ -28,38 +24,37 @@ public enum Priority
 
 public partial class Logger
 {
-    ///////////////////////////
-    // Singleton set up 
-    ///////////////////////////
+    #region SingletonSetup
 
-    private static Logger InternalInstance;
+    private static Logger m_InternalInstance;
     private static Logger Instance
     {
         get
         {
-            return InternalInstance ?? (InternalInstance = new Logger());
+            return m_InternalInstance ?? (m_InternalInstance = new Logger());
         }
 
     }
 
     private Logger()
     {
-        InternalInstance = this;
-        InternalInstance.m_Channels = new Dictionary<LoggerChannel, bool>();
+        m_InternalInstance = this;
+        m_InternalInstance.m_Channels = new Dictionary<LoggerChannel, bool>();
         AddAllChannels();
     }
+
+    #endregion
+
+    #region Members
     
-    ///////////////////////////
-    // Members
-    ///////////////////////////
     private Dictionary<LoggerChannel, bool> m_Channels;
 
     public delegate void OnLogFunc(LoggerChannel channel, Priority priority, string message);
     public static event OnLogFunc OnLog;
 
-    ///////////////////////////
-    // Channel Control
-    ///////////////////////////
+    #endregion
+
+    #region ChannelControl
 
     public static void ResetChannels()
     {
@@ -93,19 +88,17 @@ public partial class Logger
 
     private static void AddAllChannels()
     {
-        InternalInstance.m_Channels?.Clear();
+        m_InternalInstance.m_Channels?.Clear();
 
         foreach (uint channel in Enum.GetValues(typeof(LoggerChannel)))
         {
-            InternalInstance.m_Channels.Add((LoggerChannel) channel, true);
+            m_InternalInstance.m_Channels.Add((LoggerChannel) channel, true);
         }
     }
 
-    ///////////////////////////
-
-    ///////////////////////////
-    // Logging functions
-    ///////////////////////////
+    #endregion
+    
+    #region Logging
 
     /// <summary>
     /// Standard logging function, priority will default to info level
@@ -222,24 +215,29 @@ public partial class Logger
     /// <returns></returns>
     private static string ContructFinalString(LoggerChannel logChannel, Priority priority, string message, bool shouldColour)
     {
-        string channelColour    = null;
-        string priortiyColour   = priorityToColour[priority];
-
         if(shouldColour)
         {
-            if(!channelToColour.TryGetValue(logChannel, out channelColour))
+            if(!channelToColour.TryGetValue(logChannel, out string channelColour))
             {
+#if UNITY_PRO_LICENSE || UNITY_2019_4_OR_NEWER
+                channelColour = "white";
+#else
                 channelColour = "black";
-                Debug.LogErrorFormat("Please add colour for channel {0}", logChannel);
+#endif
             }
             
-            return string.Format("<b><color={0}>[{1}] </color></b> <color={2}>{3}</color>", channelColour, logChannel, priortiyColour, message);
+            return string.Format(COLORED_MESSAGE, channelColour, logChannel, PriorityToColour[priority], message);
         }
 
-        return string.Format("[{0}] {1}", logChannel, message);
+        return string.Format(RAW_MESSAGE, logChannel, message);
     }
+
+    #endregion
+
+    private const string COLORED_MESSAGE = "<b><color={0}>[{1}] </color></b> <color={2}>{3}</color>";
+    private const string RAW_MESSAGE = "[{0}] {1}";
     
-    public static readonly Dictionary<Priority, string> priorityToColour = new Dictionary<Priority, string>
+    public static readonly Dictionary<Priority, string> PriorityToColour = new Dictionary<Priority, string>
     {
 #if UNITY_PRO_LICENSE || UNITY_2019_4_OR_NEWER
         { Priority.Info,        "white" },

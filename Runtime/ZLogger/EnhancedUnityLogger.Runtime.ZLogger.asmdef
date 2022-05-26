@@ -1,0 +1,24 @@
+{
+    "name": "EnhancedUnityLogger.Runtime.ZLogger",
+    "rootNamespace": "",
+    "references": [
+        "GUID:19622d0c1901810479006eab0c2d3555",
+        "GUID:22bdae74faa2c624f9f30b497faf48b0",
+        "GUID:33661e06c33d31b4c9223810bf503247"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [
+        {
+            "name": "com.cysharp.zlogger",
+            "expression": "0",
+            "define": "ZLOGGER"
+        }
+    ],
+    "noEngineReferences": false
+}

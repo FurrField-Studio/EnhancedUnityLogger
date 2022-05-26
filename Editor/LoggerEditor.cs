@@ -7,14 +7,14 @@ using UnityEngine;
 
 public class LoggerEditor : EditorWindow
 {
-    private static LoggerEditor Instance;
+    private static LoggerEditor m_Instance;
     
     [MenuItem("Tools/Enhanced Logger Window")]
     public static void ShowWindow()
     {
         EditorWindow window = GetWindow(typeof(LoggerEditor), false, "Enhanced Logger Window", true);
-        Instance = (LoggerEditor) window;
-        Instance.GetAllChannels();
+        m_Instance = (LoggerEditor) window;
+        m_Instance.GetAllChannels();
     }
 
     private void GetAllChannels()
@@ -40,6 +40,8 @@ public class LoggerEditor : EditorWindow
     [SerializeField]
     private List<Channel> m_Channels;
 
+    private Vector2 m_ScrollPos;
+
     private void OnGUI()
     {
         if (m_Channels == null) GetAllChannels();
@@ -60,6 +62,8 @@ public class LoggerEditor : EditorWindow
 
         GUILayout.Label("Click to toggle logging channels", EditorStyles.boldLabel);
         
+        m_ScrollPos = EditorGUILayout.BeginScrollView(m_ScrollPos);
+        
         foreach (Channel channel in m_Channels.ToArray())
         {
             EditorGUILayout.BeginHorizontal();
@@ -76,13 +80,14 @@ public class LoggerEditor : EditorWindow
             EditorGUILayout.EndHorizontal();
         }
         
-        GUILayout.Label("");
         if (GUILayout.Button("Add channel"))
         {
             m_Channels.Add(new Channel((uint) m_Channels.Count, "NewChannel", Color.black));
         }
         
-        GUILayout.Label("");
+        EditorGUILayout.EndScrollView();
+        
+        GUILayout.FlexibleSpace();
         if (GUILayout.Button("Generate scripts"))
         {
             LoggerGenerator.GenerateChannelsScripts(m_Channels, GetLoggerPath());
