@@ -105,7 +105,7 @@ public partial class Logger
     /// </summary>
     /// <param name="logChannel"></param>
     /// <param name="message"></param>
-    public static void Log(LoggerChannel logChannel, string message)
+    public static void Log(LoggerChannel logChannel, object message)
     {
         FinalLog(logChannel, Priority.Info, message);
     }
@@ -116,7 +116,7 @@ public partial class Logger
     /// <param name="logChannel"></param>
     /// <param name="priority"></param>
     /// <param name="message"></param>
-    public static void Log(LoggerChannel logChannel, Priority priority, string message)
+    public static void Log(LoggerChannel logChannel, Priority priority, object message)
     {
         FinalLog(logChannel, priority, message);
     }
@@ -149,7 +149,7 @@ public partial class Logger
     /// </summary>
     /// <param name="condition">The condition to test</param>
     /// <param name="message">A user provided message that will be logged</param>
-    public static void Assert(bool condition, string message)
+    public static void Assert(bool condition, object message)
     {
         if (!condition)
         {
@@ -163,12 +163,12 @@ public partial class Logger
     /// <param name="logChannel"></param>
     /// <param name="priority"></param>
     /// <param name="message"></param>
-    private static void FinalLog(LoggerChannel logChannel, Priority priority, string message)
+    private static void FinalLog(LoggerChannel logChannel, Priority priority, object message)
     {
         if (IsChannelActive(logChannel))
         {
             // Dialog boxes can't support rich text mark up, do we won't colour the final string 
-			string finalMessage = ContructFinalString(logChannel, priority, message, (priority != Priority.FatalError));
+			string finalMessage = ContructFinalString(logChannel, priority, message.ToString(), (priority != Priority.FatalError));
 
 #if UNITY_EDITOR && UNITY_DIALOGS
             // Fatal errors will create a pop up when in the editor
